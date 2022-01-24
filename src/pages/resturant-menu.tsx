@@ -2,12 +2,12 @@ import '../App.scss';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Resturant, ResturantMenuItem } from '../models';
+import { TResturant, TResturantMenuItem } from '../models';
 
-function ResturantMenu() {
+function ResturantMenu({ addToShoppingCart }: { addToShoppingCart: Function }) {
   const { resturantId } = useParams();
-  const [resturantMenu, setResturantMenu] = useState<Array<ResturantMenuItem>>();
-  const [resturant, setResturant] = useState<Resturant>();
+  const [resturantMenu, setResturantMenu] = useState<Array<TResturantMenuItem>>();
+  const [resturant, setResturant] = useState<TResturant>();
 
   const fetchResturant = async () => {
     const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}`);
@@ -19,8 +19,8 @@ function ResturantMenu() {
     setResturantMenu(data);
   };
 
-  const addItemToShoppingCart = (id: number) => {
-    console.log(`added to cart`);
+  const addItemToShoppingCart = (menuItem: TResturantMenuItem) => {
+    addToShoppingCart(menuItem);
   };
 
   // eslint-disable-next-line
@@ -37,7 +37,7 @@ function ResturantMenu() {
   return (
     <div>
       <h2>Meny för {resturant?.name}</h2>
-      {resturantMenu?.map((menuItem: ResturantMenuItem, index: number) => {
+      {resturantMenu?.map((menuItem: TResturantMenuItem, index: number) => {
         return (
           <div key={`menuItem${index}`}>
             <h3>{menuItem.name}</h3>
@@ -50,7 +50,9 @@ function ResturantMenu() {
             </span>
             <span>{menuItem.price} kr</span>
             <br />
-            <button onClick={() => addItemToShoppingCart(menuItem.id)}>Köp</button>
+            <button className="btn" onClick={() => addItemToShoppingCart(menuItem)}>
+              Lägg till i varukorg
+            </button>
           </div>
         );
       })}

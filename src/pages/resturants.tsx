@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import '../App.scss';
-import { Resturant } from '../models';
+import { TResturant } from '../models';
 
-function Resturants({ geoloactionActive, closestReturant, resturants }: { geoloactionActive: boolean; closestReturant: Resturant | undefined; resturants: Array<Resturant> | undefined }) {
+function Resturants({ geoloactionActive, closestReturant, resturants }: { geoloactionActive: boolean; closestReturant: TResturant | undefined; resturants: Array<TResturant> | undefined }) {
   if (!resturants || !closestReturant) {
     return <div>Laddar...</div>;
   }
@@ -21,9 +21,9 @@ function Resturants({ geoloactionActive, closestReturant, resturants }: { geoloa
       )}
 
       <p>Menyer finns för: </p>
-      {resturants.map((resturant: Resturant) => {
+      {resturants.map((resturant: TResturant, index: number) => {
         return (
-          <div>
+          <div key={`resturants${index}`}>
             <Link to={`/${resturant.id}`}>{resturant.name}</Link>
             <br />
             <span>{resturant.address1}</span>

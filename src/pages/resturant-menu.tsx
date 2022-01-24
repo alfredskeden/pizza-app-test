@@ -19,9 +19,15 @@ function ResturantMenu() {
     setResturantMenu(data);
   };
 
+  const addItemToShoppingCart = (id: number) => {
+    console.log(`added to cart`);
+  };
+
+  // eslint-disable-next-line
   useEffect(() => {
     fetchResturantMenu();
     fetchResturant();
+    // eslint-disable-next-line
   }, []);
 
   if (!resturantMenu || !resturant) {
@@ -30,9 +36,23 @@ function ResturantMenu() {
 
   return (
     <div>
-      <span>Meny för {resturant?.name}</span>
-      {resturantMenu?.map((menuItem: ResturantMenuItem) => {
-        return <div>{menuItem.name}</div>;
+      <h2>Meny för {resturant?.name}</h2>
+      {resturantMenu?.map((menuItem: ResturantMenuItem, index: number) => {
+        return (
+          <div key={`menuItem${index}`}>
+            <h3>{menuItem.name}</h3>
+            <span>
+              {menuItem.topping?.map((value: string, index2: number) => (
+                <span key={index2}>
+                  {value} {index2 === (menuItem.topping?.length as number) - 1 ? <br /> : ``}
+                </span>
+              ))}
+            </span>
+            <span>{menuItem.price} kr</span>
+            <br />
+            <button onClick={() => addItemToShoppingCart(menuItem.id)}>Köp</button>
+          </div>
+        );
       })}
     </div>
   );

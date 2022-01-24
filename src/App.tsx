@@ -22,13 +22,13 @@ function App() {
     setResturants(data);
   };
 
+  // eslint-disable-next-line
   useEffect(() => {
     fetchResturants();
   }, []);
 
   useEffect(() => {
     setClosestResturant(getClosestResturant(resturants, lat, long));
-    console.log(closestReturant);
   }, [resturants, lat, long]);
 
   navigator.geolocation.getCurrentPosition(

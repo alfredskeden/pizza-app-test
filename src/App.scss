@@ -114,6 +114,9 @@ header {
     flex-direction: row;
   }
   
+  &.justify-between {
+    justify-content: space-between;
+  }
 }
 
 .mr-1 {

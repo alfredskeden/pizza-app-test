@@ -3,22 +3,28 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TResturant, TResturantMenuItem } from '../shared/models';
+import Loading from '../component/loading';
 
 function ResturantMenu({ addToShoppingCart }: { addToShoppingCart: Function }) {
   const { resturantId } = useParams();
+
+  /** States */
   const [resturantMenu, setResturantMenu] = useState<Array<TResturantMenuItem>>();
   const [resturant, setResturant] = useState<TResturant>();
 
+  /** Fetches the resturant and adds it to the state useParams() in url */
   const fetchResturant = async () => {
     const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}`);
     setResturant(data);
   };
 
+  /** Fetches the resturants menu based on useParams() in url and add its to the resturantMenu */
   const fetchResturantMenu = async () => {
     const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}/menu?orderBy=rank`);
     setResturantMenu(data);
   };
 
+  /** Calls the param Function to add a resturant item to the shopping cart */
   const addItemToShoppingCart = (menuItem: TResturantMenuItem) => {
     addToShoppingCart(menuItem);
   };
@@ -30,8 +36,9 @@ function ResturantMenu({ addToShoppingCart }: { addToShoppingCart: Function }) {
     // eslint-disable-next-line
   }, []);
 
+  /** wait until everything has been loading untill we show anything */
   if (!resturantMenu || !resturant) {
-    return <div className="mt-3"><h2>Laddar...</h2></div>;
+    return <Loading>Laddar...</Loading>;
   }
 
   return (

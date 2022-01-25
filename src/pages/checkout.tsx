@@ -5,10 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { TResturantMenuItem, TShoppingCart } from '../shared/models';
 import { getTotalPrice } from '../shared/shared';
 
+/** Checkout route. Where we do checkout and sends order information to api */
 function Checkout({ shoppingCart, clearShoppingCart }: { shoppingCart: TShoppingCart; clearShoppingCart: Function }) {
   const navigate = useNavigate();
+
+  /** Sets order sent state */
   const [sendOrderClicked, SetSendOrderClicked] = useState<boolean>(false);
 
+  /** Sends order information and creates the order in the api */
   const sendOrderConfirmation = async () => {
     const orderDetails = await axios.post(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/orders/`, { cart: shoppingCart.cart, resturantId: shoppingCart.resturant?.id });
     if (orderDetails) {
@@ -17,7 +21,7 @@ function Checkout({ shoppingCart, clearShoppingCart }: { shoppingCart: TShopping
     }
   };
 
-  return shoppingCart.cart.length > 0 ? (
+  return (shoppingCart.cart.length > 0 ? (
     <>
       <h2>Varukorg</h2>
       {shoppingCart.cart.map((resturantMenuItem: TResturantMenuItem, index: number) => {
@@ -44,7 +48,7 @@ function Checkout({ shoppingCart, clearShoppingCart }: { shoppingCart: TShopping
     </>
   ) : (
     <span>{sendOrderClicked ? `Order skickas...` : `Inget i varukorgen`}</span>
-  );
+  ));
 }
 
 export default Checkout;

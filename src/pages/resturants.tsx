@@ -1,10 +1,14 @@
-import { Link } from 'react-router-dom';
 import '../App.scss';
+import { Link } from 'react-router-dom';
 import { TResturant } from '../shared/models';
+import Loading from '../component/loading';
 
-function Resturants({ geoloactionActive, closestReturant, resturants, geolocationText }: { geoloactionActive: boolean; closestReturant: TResturant | undefined; resturants: Array<TResturant> | undefined; geolocationText: string | undefined }) {
+function Resturants({ geoloactionActive, closestReturant, resturants, geolocationText }:
+                    { geoloactionActive: boolean; closestReturant: TResturant | undefined; resturants: Array<TResturant> | undefined; geolocationText: string | undefined }): JSX.Element {
+  
+  /** If no resturants show loading component */
   if (!resturants) {
-    return <div className="mt-3"><h2>Laddar...</h2></div>;
+    return <Loading>Laddar...</Loading>;
   }
 
   return (

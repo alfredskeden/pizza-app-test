@@ -13,6 +13,8 @@ import { getClosestResturant } from './shared/shared';
 import ScrollToTop from './component/scroll-to-top';
 
 function App(): JSX.Element {
+
+  /** States */
   const [resturants, setResturants] = useState<Array<TResturant>>([]);
   const [closestReturant, setClosestResturant] = useState<TResturant>();
   const [shoppingCart, setShoppingCart] = useState<TShoppingCart>({ cart: [] });
@@ -21,21 +23,25 @@ function App(): JSX.Element {
   const [lat, setLat] = useState<number>(0);
   const [long, setLong] = useState<number>(0);
 
+  /** Fetches the resturants and adds them to the resturant state array. */
   const fetchResturants = async () => {
     const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/`);
     setResturants(data);
   };
 
+  /** Adds a shopping cart item and a resturant to the shopping cart. */
   const addShoppingCartItem = (resturantMenuItem: TResturantMenuItem, resturant: TResturant): void => {
     setShoppingCart({ cart: [...shoppingCart.cart, resturantMenuItem], resturant: resturant });
   };
 
+  /** Cleares the shopping cart. */
   const clearShoppingCart = (): void => {
     setShoppingCart({ cart: [] });
   };
 
+  /** removes menu item form the shopping cart */
   const removeResturantItemFromCart = (resturantItemIndex: number): void => {
-    setShoppingCart({ cart: [...shoppingCart.cart.filter((resturantItem: TResturantMenuItem, index: number) => resturantItemIndex !== index)], resturant: shoppingCart.resturant });
+    setShoppingCart({ cart: [...shoppingCart.cart.filter((x, index: number) => resturantItemIndex !== index)], resturant: shoppingCart.resturant });
   };
 
   // eslint-disable-next-line
@@ -43,10 +49,12 @@ function App(): JSX.Element {
     fetchResturants();
   }, []);
 
+  /** When state long gets set we set the closest resturant from getClosesetResturant */
   useEffect(() => {
     setClosestResturant(getClosestResturant(resturants, lat, long));
   }, [resturants, lat, long]);
 
+  /** Code to ask and get gelocation information from the browser and user to get the closest resturant */
   navigator.geolocation.getCurrentPosition(
     (position) => {
       setLat(position.coords.latitude);

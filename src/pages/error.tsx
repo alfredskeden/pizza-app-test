@@ -1,7 +1,9 @@
 import '../App.scss';
+import Loading from '../component/loading';
 
+/** Error page, uses the Loading component temporarly */
 function Error() {
-  return <p>The error 404 page</p>;
+  return <Loading>This is the 404 page</Loading>
 }
 
 export default Error;

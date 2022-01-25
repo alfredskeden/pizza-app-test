@@ -3,13 +3,17 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TOrder, TResturantMenuItem, TResturant } from '../shared/models';
+import Loading from '../component/loading';
 
-function OrderStatus() {
+function OrderStatus(): JSX.Element {
   const { orderId } = useParams();
+
+  /** States */
   const [order, setOrder] = useState<TOrder>();
   const [resturant, setResturant] = useState<TResturant>();
   const [menu, setMenu] = useState<Array<TResturantMenuItem>>([]);
 
+  /** Fetches the menu and resturant on the order status page to write infornation in dom */
   const getCartInfo = async (resturantId: number) => {
     const menu = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}/menu`);
     const resturant = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}`);
@@ -17,6 +21,7 @@ function OrderStatus() {
     setResturant(resturant.data);
   };
 
+  /** Fetches the order details from the useParams in url */
   const getOrder = async () => {
     const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/orders/${orderId}`);
     setOrder(data);
@@ -28,8 +33,9 @@ function OrderStatus() {
     // eslint-disable-next-line
   }, []);
 
+  /** Dont show anything untill everything has been fetched. */
   if (!order || !resturant || menu.length < 0) {
-    return <div>Laddar orderstatus...</div>;
+    return <Loading>Laddar orderstatus...</Loading>;
   }
 
   return (
@@ -39,9 +45,9 @@ function OrderStatus() {
       <span>Status: {order.status}</span>
       <span>Beställd: {new Date(order.orderedAt).toLocaleString()}</span>
       <span>Beräknad ankomst: {new Date(order.esitmatedDelivery).toLocaleString()}</span>
-      <span>Resturang: {resturant?.name}</span>
-      <span>Adress: {resturant?.address1}</span>
-      <span>{resturant?.address2}</span>
+      <span>Resturang: {resturant.name}</span>
+      <span>Adress: {resturant.address1}</span>
+      <span>{resturant.address2}</span>
       <div className="order-status border">
       {order.cart.map((value, index: number) => {
         const menuItem: TResturantMenuItem | undefined = menu.find((resturantMenuItem: TResturantMenuItem) => resturantMenuItem.id === value.menuItemId);

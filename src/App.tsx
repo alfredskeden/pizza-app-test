@@ -8,14 +8,16 @@ import OrderStatus from './pages/order-status';
 import Error from './pages/error';
 import ResturantMenu from './pages/resturant-menu';
 import ShoppingCart from './component/shopping-cart';
-import { TResturant, TResturantMenuItem, TShoppingCart } from './models';
-import { getClosestResturant } from './shared';
+import { TResturant, TResturantMenuItem, TShoppingCart } from './shared/models';
+import { getClosestResturant } from './shared/shared';
+import ScrollToTop from './component/scroll-to-top';
 
-function App() {
+function App(): JSX.Element {
   const [resturants, setResturants] = useState<Array<TResturant>>([]);
   const [closestReturant, setClosestResturant] = useState<TResturant>();
   const [shoppingCart, setShoppingCart] = useState<TShoppingCart>({ cart: [] });
   const [geoloactionActive, setGeolocationActive] = useState<boolean>(false);
+  const [geolocationText, setGeolocationText] = useState<string | undefined>(`Försöker att hitta närmaste pizzerian...`);
   const [lat, setLat] = useState<number>(0);
   const [long, setLong] = useState<number>(0);
 
@@ -24,15 +26,15 @@ function App() {
     setResturants(data);
   };
 
-  const addShoppingCartItem = (resturantMenuItem: TResturantMenuItem, resturant: TResturant) => {
+  const addShoppingCartItem = (resturantMenuItem: TResturantMenuItem, resturant: TResturant): void => {
     setShoppingCart({ cart: [...shoppingCart.cart, resturantMenuItem], resturant: resturant });
   };
 
-  const clearShoppingCart = () => {
+  const clearShoppingCart = (): void => {
     setShoppingCart({ cart: [] });
   };
 
-  const removeResturantItemFromCart = (resturantItemIndex: number) => {
+  const removeResturantItemFromCart = (resturantItemIndex: number): void => {
     setShoppingCart({ cart: [...shoppingCart.cart.filter((resturantItem: TResturantMenuItem, index: number) => resturantItemIndex !== index)], resturant: shoppingCart.resturant });
   };
 
@@ -50,17 +52,21 @@ function App() {
       setLat(position.coords.latitude);
       setLong(position.coords.longitude);
       setGeolocationActive(true);
+      setGeolocationText(undefined);
     },
     (error) => {
       console.log(error);
+      setGeolocationActive(true);
+      setGeolocationText(`${error.message}`)
     }
   );
 
   return (
     <Router>
+      <ScrollToTop />
       <header className="header">
         <Link to={`/`}>
-          <h1>Alfreds order pizza app</h1>
+          <h1>Alfreds pizza <br /> order app</h1>
         </Link>
       </header>
       <main className="container">
@@ -70,7 +76,7 @@ function App() {
             element={
               <div>
                 <ShoppingCart shoppingCart={shoppingCart} removeResturantItemFromCart={removeResturantItemFromCart} />
-                <Resturants geoloactionActive={geoloactionActive} closestReturant={closestReturant} resturants={resturants} />
+                <Resturants geoloactionActive={geoloactionActive} closestReturant={closestReturant} resturants={resturants} geolocationText={geolocationText} />
               </div>
             }
           />

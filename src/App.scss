@@ -1,10 +1,121 @@
-*,
-html {
-  box-sizing: border-box;
-  margin: 0px;
+header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-image: url('../public/beanstalk-dark.png');
+  margin-bottom: 0.5rem;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
 }
 
-header.header a {
-  text-decoration: none;
-  color: black;
+.container {
+  display: grid;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+
+  a, a:visited {
+    color: black;
+  }
+}
+
+.shopping-cart {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  height: 3rem;
+  max-width: 80%;
+  overflow-y: hidden;
+  border-style: solid;
+  border-color: black;
+  background-color: white;
+  margin-left: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  transition: ease 400ms;
+
+  .cart-items {
+    display: none;
+  }
+}
+
+.shopping-cart:hover, .shopping-cart:focus {
+  height: inherit;
+  overflow-y: unset;
+
+  padding: 2rem;
+
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.mt-3 {
+  margin-top: 3rem !important;
+}
+
+.btn {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  background-color: white;
+
+  max-width: 125px;
+
+  &.complete {
+    background-color: lightgreen;
+  }
+
+  &.removeFromCart {
+    background-color: lightcoral;
+    max-width: 2rem;
+  }
+}
+
+.order-status {
+  display: flex;
+  flex-direction: column;
+
+  span {
+    margin-bottom: 2px;
+  }
+
+  &.border {
+    margin-top: 10px;
+    border-style: solid;
+    border-color: black;
+    padding: 1rem;
+  }
+}
+
+.flex {
+  display: flex !important;
+
+  &.column {
+    flex-direction: column;
+  }
+  &.row {
+    flex-direction: row;
+  }
+  
+}
+
+.mr-1 {
+  margin-right: 1rem;
 }

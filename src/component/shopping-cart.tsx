@@ -4,7 +4,7 @@ import { TResturantMenuItem, TShoppingCart } from '../shared/models';
 import { getTotalPrice } from '../shared/shared';
 
 /** Shopping cart component that is show on main page and on menu page */
-function ShoppingCart({ shoppingCart, removeResturantItemFromCart }: { shoppingCart: TShoppingCart; removeResturantItemFromCart: Function }) {
+export default function ShoppingCart({ shoppingCart, removeResturantItemFromCart }: { shoppingCart: TShoppingCart; removeResturantItemFromCart: Function }) {
   const navigate = useNavigate();
 
   return (
@@ -30,6 +30,4 @@ function ShoppingCart({ shoppingCart, removeResturantItemFromCart }: { shoppingC
       ) : (<h3>Inget i varukorgen</h3>)}
     </div>
   )
-}
-
-export default ShoppingCart;
+};

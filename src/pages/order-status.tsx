@@ -1,7 +1,7 @@
 import '../App.scss';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { TOrder, TResturantMenuItem, TResturant } from '../shared/models';
 import Loading from '../component/loading';
 
@@ -49,23 +49,24 @@ function OrderStatus(): JSX.Element {
       <span>Adress: {resturant.address1}</span>
       <span>{resturant.address2}</span>
       <div className="order-status border">
-      {order.cart.map((value, index: number) => {
-        const menuItem: TResturantMenuItem | undefined = menu.find((resturantMenuItem: TResturantMenuItem) => resturantMenuItem.id === value.menuItemId);
-        
-        return (
-          <div className="flex column" key={`cart${index}`}>
-            <span>
-              {menuItem?.category}: {menuItem?.name}
-            </span>
-            <span>Antal: {value.quantity}</span>
-            <span>Pris: {menuItem?.price} kr</span>
-            <br />
-          </div>
-        );
-      })}
-      <br />
-      <span>Totalt pris: {order.totalPrice} kr</span>
+        {order.cart.map((value, index: number) => {
+          const menuItem: TResturantMenuItem | undefined = menu.find((resturantMenuItem: TResturantMenuItem) => resturantMenuItem.id === value.menuItemId);
+          
+          return (
+            <div className="flex column" key={`cart${index}`}>
+              <span>
+                {menuItem?.category}: {menuItem?.name}
+              </span>
+              <span>Antal: {value.quantity}</span>
+              <span>Pris: {menuItem?.price} kr</span>
+              <br />
+            </div>
+          );
+        })}
+        <br />
+        <span>Totalt pris: {order.totalPrice} kr</span>
       </div>
+      <Link className="mt-3" to={`/`}>Till förstasidan</Link>
     </div>
   );
 }

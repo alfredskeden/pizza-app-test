@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TResturantMenuItem, TShoppingCart } from '../shared/models';
 import { getTotalPrice } from '../shared/shared';
+import Loading from '../component/loading';
 
 /** Checkout route. Where we do checkout and sends order information to api */
 function Checkout({ shoppingCart, clearShoppingCart }: { shoppingCart: TShoppingCart; clearShoppingCart: Function }) {
@@ -47,7 +48,7 @@ function Checkout({ shoppingCart, clearShoppingCart }: { shoppingCart: TShopping
       </div>
     </>
   ) : (
-    <span>{sendOrderClicked ? `Order skickas...` : `Inget i varukorgen`}</span>
+    <span>{sendOrderClicked ? `Order skickas...` : <Loading>Inget i varukorgen</Loading>}</span>
   ));
 }
 

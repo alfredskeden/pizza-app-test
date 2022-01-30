@@ -1,9 +1,10 @@
 import '../App.scss';
-import axios from 'axios';
+
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { TOrder, TResturantMenuItem, TResturant } from '../shared/models';
 import Loading from '../component/loading';
+import { getMenuFromResturantId, getOrderFromId, getResturantFromResturantId } from '../shared/api';
 
 function OrderStatus(): JSX.Element {
   const { orderId } = useParams();
@@ -13,24 +14,18 @@ function OrderStatus(): JSX.Element {
   const [resturant, setResturant] = useState<TResturant>();
   const [menu, setMenu] = useState<Array<TResturantMenuItem>>([]);
 
-  /** Fetches the menu and resturant on the order status page to write infornation in dom */
-  const getCartInfo = async (resturantId: number) => {
-    const menu = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}/menu`);
-    const resturant = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/restaurants/${resturantId}`);
-    setMenu(menu.data);
-    setResturant(resturant.data);
-  };
-
-  /** Fetches the order details from the useParams in url */
-  const getOrder = async () => {
-    const { data } = await axios.get(`https://private-anon-c842467727-pizzaapp.apiary-mock.com/orders/${orderId}`);
-    setOrder(data);
-    getCartInfo(data.restuarantId);
-  };
-
   useEffect(() => {
-    getOrder();
-    // eslint-disable-next-line
+    getOrderFromId(orderId).then((res) => {
+      setOrder(res.data);
+    }).finally(() => {
+      getResturantFromResturantId(order?.restuarantId).then((res) => {
+        setResturant(res.data);
+      });
+
+      getMenuFromResturantId(order?.restuarantId).then((res) => {
+        setMenu(res.data);
+      })
+    });
   }, []);
 
   /** Dont show anything untill everything has been fetched. */
